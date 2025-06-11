@@ -17,7 +17,7 @@ public class LdapPasswordChangeOptions : IAppSettings
     /// <inheritdoc />
     public string[] LdapHostnames
     {
-        get => ldapHostnames ?? new string[] { };
+        get => ldapHostnames ?? [];
         set => ldapHostnames = value;
     }
 
