@@ -172,20 +172,20 @@ public class PasswordChangeProvider : IPasswordChangeProvider
                 groups = userPrincipal.GetAuthorizationGroups();
             }
 
-            if (_options.RestrictedAdGroups == null)
+            if (_options.RestrictedADGroups is not null)
             {
-                return groups.Any(x => _options.AllowedAdGroups?.Contains(x.Name) == true)
+                return groups.Any(x => _options.AllowedADGroups?.Contains(x.Name) == true)
                     ? null
                     : new ApiErrorItem(ApiErrorCode.ChangeNotPermitted, "The User principal is not listed as allowed");
             }
 
-            if (groups.Any(x => _options.RestrictedAdGroups.Contains(x.Name)))
+            if (groups.Any(x => _options.RestrictedADGroups.Contains(x.Name)))
             {
                 return new ApiErrorItem(ApiErrorCode.ChangeNotPermitted,
                     "The User principal is listed as restricted");
             }
 
-            return groups.Any(x => _options.AllowedAdGroups?.Contains(x.Name) == true)
+            return groups.Any(x => _options.AllowedADGroups?.Contains(x.Name) == true)
                 ? null
                 : new ApiErrorItem(ApiErrorCode.ChangeNotPermitted, "The User principal is not listed as allowed");
         }
@@ -281,7 +281,7 @@ public class PasswordChangeProvider : IPasswordChangeProvider
         if (_options.UseAutomaticContext)
         {
             _logger.LogWarning("Using AutomaticContext");
-            return new PrincipalContext(ContextType.Domain);
+            return new PrincipalContext(ContextType.Domain, "asrvm-dc.isolutionsdev.loc:389", "dc=isolutionsdev,dc=loc");
         }
 
         var domain = $"{_options.LdapHostnames.First()}:{_options.LdapPort}";

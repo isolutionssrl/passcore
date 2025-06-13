@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Unosquare.PassCore.Web.Models;
+using Unosquare.PassCore.PasswordProvider;
+
 #if DEBUG
 using Unosquare.PassCore.Web.Helpers;
 #elif PASSCORE_LDAP_PROVIDER
@@ -63,7 +65,7 @@ public class Startup
         services.Configure<ClientSettings>(Configuration.GetSection(nameof(ClientSettings)));
         services.Configure<WebSettings>(Configuration.GetSection(nameof(WebSettings)));
 #if DEBUG
-        services.Configure<IAppSettings>(Configuration.GetSection(AppSettingsSectionName));
+        services.Configure<PasswordChangeOptions>(Configuration.GetSection(AppSettingsSectionName));
         services.AddSingleton<IPasswordChangeProvider, DebugPasswordChangeProvider>();
 #elif PASSCORE_LDAP_PROVIDER
         services.Configure<LdapPasswordChangeOptions>(Configuration.GetSection(AppSettingsSectionName));
@@ -92,7 +94,9 @@ public class Startup
     public void Configure(IApplicationBuilder app, IOptions<WebSettings> settings)
     {
         if (settings.Value.EnableHttpsRedirect)
+        {
             app.UseHttpsRedirection();
+        }
 
         app.UseDefaultFiles();
         app.UseStaticFiles();

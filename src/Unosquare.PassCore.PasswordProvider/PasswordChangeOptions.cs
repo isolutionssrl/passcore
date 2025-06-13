@@ -28,7 +28,7 @@ public class PasswordChangeOptions : IAppSettings
     /// <value>
     /// The restricted ad groups.
     /// </value>
-    public List<string>? RestrictedAdGroups { get; set; }
+    public List<string>? RestrictedADGroups { get; set; }
 
     /// <summary>
     /// Gets or sets the allowed ad groups.
@@ -36,7 +36,7 @@ public class PasswordChangeOptions : IAppSettings
     /// <value>
     /// The allowed ad groups.
     /// </value>
-    public List<string>? AllowedAdGroups { get; set; }
+    public List<string>? AllowedADGroups { get; set; }
 
     /// <summary>
     /// Gets or sets the identifier type for user.
